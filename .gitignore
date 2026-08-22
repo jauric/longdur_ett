@@ -1,0 +1,9 @@
+# Private Files
+_notes
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
