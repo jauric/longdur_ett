@@ -44,7 +44,7 @@ class Sample(Dataset):
 
 
 
-def initialize_dataloaders(
+def create_batches(
         prepared_data: tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict], 
         context_length: int, 
         forecast_length: int,

@@ -9,7 +9,7 @@ https://github.com/zhouhaoyi/ETDataset
 ## Contents for this folder
 
 - DL4TS/
-    -  README.md
+    - README.md
     - pyproject.toml
     - .gitignore
     - models/
@@ -19,8 +19,17 @@ https://github.com/zhouhaoyi/ETDataset
     - utils/
         - data_loader.py
         - data_utils.py
-        - training_loop.py
+        - training.py
+        - evaluation.py
     - notebooks/
         - (...).ipynb
     - docs/
         - (final_presentation).pdf
+
+
+
+## Future improvement
+
+- add minimum improvement threshold to early stopping evaluations in training.training_loop()
+- improve reproducibility through saved seeds
+- use k-fold cross-validation for hyperparameter optimization
