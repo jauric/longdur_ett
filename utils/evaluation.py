@@ -4,7 +4,7 @@ from torch.utils.data import DataLoader
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 
-
+import pandas as pd
 
 
 def model_test(
@@ -66,3 +66,55 @@ def model_test(
     print(f"Test MAE: {test_mae:.8f}")
 
     return y_test_predictions, y_test_targets, test_mse, test_mae
+
+
+
+def prediction_plot(
+        prepared_data: tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict],
+        test_results: tuple[np.ndarray, np.ndarray, float, float], 
+        context_length: int, 
+        forecast_length: int):
+
+    # Unpack time series to plot
+    _, _, _, _, training_split, validation_split, test_split = prepared_data 
+    y_test_predictions, y_test_targets, _, _                 = test_results
+
+    # Create time axis, use the input and prediction window as bounds
+    time = np.arange(-context_length, forecast_length, 1)
+
+    # Plot the results
+    plt.figure(figsize=(12, 5))
+
+    # Plot inputs
+    plt.plot(
+        time[:context_length],
+        validation_split[-context:]["OT"],
+        linewidth=2,
+        label="x_inputs",
+        color="navy",
+    )
+
+    # Plot targets
+    plt.plot(
+        time[context_length:(context_length+forecast_length)],
+        y_test_targets[0],
+        linewidth=2,
+        label="y_target",
+        color="tab:blue",
+    )
+
+    # Plot predictions
+    plt.plot(
+        time[context_length:(context_length+forecast_length)],
+        y_test_predictions[0],
+        linewidth=2,
+        label="y_predicction",
+        color="tab:orange",
+    )
+
+    plt.xlabel("Time (h)")
+    plt.ylabel("OT")
+
+    plt.legend()
+    plt.tight_layout()
+    plt.show()

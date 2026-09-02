@@ -20,7 +20,7 @@ def data_prep(
         context_length: int,
         scaler: object
         
-        ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict]:
+        ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
 
     '''
     Converting the source DataFrame into split and scaled datasets, while returning the scalers.
@@ -92,11 +92,5 @@ def data_prep(
         test_set_scaled[column] = scaler.transform(test_set[[column]])
 
 
-    return training_set_scaled, validation_set_scaled, test_set_scaled, scalers_dict
-    # each scaled set has shape [len, 7]
-
-
-
-def data_rescaling_h():
-    return
-
+    return training_set_scaled, validation_set_scaled, test_set_scaled, scalers_dict, training_split, validation_split, test_split
+    # each set and split has shape [len, 7]

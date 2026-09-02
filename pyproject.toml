@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dl4ts"
+version = "0.1.0"
+description = "Deep learning for time series"
+readme = "README.md"
+requires-python = ">=3.13.11"
+dependencies = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["models*", "utils*", "weights*"]

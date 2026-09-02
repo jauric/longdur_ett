@@ -30,10 +30,6 @@ def model_training(
     # Optimizer
     optimizer = torch.optim.Adam(model.parameters(), lr = optimizer_learningrate)
 
-    # Print number of trainable parameters
-    num_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"Model has {num_params} trainable parameters.")
-
     # Select device for computations
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Device:", device)
