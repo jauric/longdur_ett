@@ -119,7 +119,7 @@ def plot_test_results(
     # Plot mse over sample range
     plt.figure(figsize=(12, 5))
     plt.plot(range(y_predictions.shape[0]), mse, linewidth=1, color="blue", label="MSE(k)")
-    plt.plot(range(y_predictions.shape[0]), mse_mean_plotting, linewidth=2, color="orange", label="MSE_mean")
+    plt.plot(range(y_predictions.shape[0]), mse_mean_plotting, linewidth=2, color="orange", label=f"MSE_mean = {mse_mean:.4f}")
     plt.scatter(k_mse_max, mse_max, s = 75, color="red", marker="^", label=f"MSE_max = {mse_max:.4}, k = {k_mse_max}" )
     plt.scatter(k_mse_min, mse_min, s = 75, color="red", marker="v", label=f"MSE_min = {mse_min:.4}, k = {k_mse_min}")
     plt.xlabel("Test Sample Index k")
@@ -149,7 +149,7 @@ def plot_test_results(
     # Plot mae over sample range
     plt.figure(figsize=(12, 5))
     plt.plot(range(y_predictions.shape[0]), mae, linewidth=1, color="blue", label="MAE(k)")
-    plt.plot(range(y_predictions.shape[0]), mae_mean_plotting, linewidth=2, color="orange", label="MAE_mean")
+    plt.plot(range(y_predictions.shape[0]), mae_mean_plotting, linewidth=2, color="orange", label=f"MAE_mean = {mae_mean:.4f}")
     plt.scatter(k_mae_max, mae_max, s = 75, color="red", marker="^", label=f"MAE_max = {mae_max:.4}, k = {k_mae_max}" )
     plt.scatter(k_mae_min, mae_min, s = 75, color="red", marker="v", label=f"MAE_min = {mae_min:.4}, k = {k_mae_min}")
     plt.xlabel("Test Sample Index k")
