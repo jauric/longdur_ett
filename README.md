@@ -25,11 +25,11 @@ Available materials focus on **one-shot univariate forecasting of the oil temper
 
 ## Installation & Requirements
 
-### Minimal Requirements
+### Minimum Requirements
 
 - Python: 3.13.11+
-- A suitable `torch` build is required (CPU or GPU).
-- See `pyproject.toml` for all dependencies. 
+- A suitable `torch` build is required (CPU or GPU)
+- See `pyproject.toml` for all dependencies 
 
 ### Quick Start
 
@@ -44,7 +44,10 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -e .
 
-# If installation fails due to temporary storage (large PyTorch wheels), create a new temporary storage folder on your home directory and set this folder as target for temporary storage needs of the current terminal. Then retry installation.
+# Installation may fail due to insufficient temporary storage (large PyTorch wheels). Fix: 
+# (1) Create a new temporary storage folder on your home directory
+# (2) Select this folder for temporary storage needs of the current terminal
+# (3) Retry installation
 mkdir -p "$HOME/tmp"
 export TMPDIR="$HOME/tmp"
 pip install -e .
@@ -58,8 +61,8 @@ jupyter lab results/ETTh1_96-16_LSTM_1x48.ipynb
 
 
 ## User Guidance
-- Jupyter notebook templates in the *notebooks/* folder can be copied and adapted to the desired forecasting problem
-- After results have been obtained, export the best weights and store notebook and weights.pt in the results folder
+- Jupyter notebook templates in the *notebooks/* folder can be copied and adapted to the desired problem
+- After results have been obtained, export the weights and store notebook and weights in the results folder
 - An example is available as "ETTh1_96-16_LSTM_1x48.ipynb"
 - The model will automatically train/evaluate on cuda if suitable GPUs are available
 
@@ -72,7 +75,7 @@ jupyter lab results/ETTh1_96-16_LSTM_1x48.ipynb
 - Add foundation models (xLSTM)
 - Add DLinear and an adaptation to LSTMs ("DLSTM")
 - Add forecast-correction strategies with recursive loops for dynamic updates
-- Try to reverse-engineer physical causalities within the system to reduce noise (ambient conditions, heat transfer,...)
+- Reverse-engineer physical causalities within the system to reduce noise (ambient conditions, heat transfer, ...)
 - Add minimum improvement threshold to early stopping evaluations in training.training_loop()
-- Add remote GPU support for faster training & extensive hyperparameter search
+- Improve remote GPU support for faster training & extensive hyperparameter search
 - Improve reproducibility through saved seeds
