@@ -33,3 +33,4 @@ https://github.com/zhouhaoyi/ETDataset
 - add minimum improvement threshold to early stopping evaluations in training.training_loop()
 - improve reproducibility through saved seeds
 - use k-fold cross-validation for hyperparameter optimization
+- remove scikit-learn dependency, implement mse, mae, scalers in numpy instead

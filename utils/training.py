@@ -144,6 +144,6 @@ def model_training(
     plt.legend()
     plt.show()
     
-    print(f'Early stopping after {best_epoch} training epochs.')
+    print(f'Best results are achieved for {best_epoch} training epochs.')
 
     return best_state_dict

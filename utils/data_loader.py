@@ -104,8 +104,8 @@ def create_batches(
     # Shape check: extract batches for x_inputs and y_targets data
     x_inputs_batch, y_targets_batch = next(iter(training_batches))
 
-    print("Input shape:", x_inputs_batch.shape)
-    print("Target shape:", y_targets_batch.shape)
+    print("x_inputs batch shape:", x_inputs_batch.shape)
+    print("y_targets batch shape:", y_targets_batch.shape)
     print("Number of batches:", len(training_batches))
 
 

@@ -27,45 +27,60 @@ def model_test(
     model.eval()
 
     # Initialize arrays for bookkeeping
-    y_test_targets_scaled = []
-    y_test_predictions_scaled = []
-
-    with torch.no_grad():
-        # no gradient calculation required
-
-        for x_test_batch, y_test_targets_batch in test_batches:
-
-            x_test_batch        = x_test_batch.to(device)
-
-            # Make the prediction
-            y_test_predictions_batch = model(x_test_batch)
-
-            # Collect all y_prediction and y_target batches simultaneously (also works whenthe batches are shuffled)
-            # Convert tensors to np.ndarrays for analysis, must be done on cpu so .cpu() on the predictions. 
-            # Targets are on cpu already, never sent to device
-            y_test_predictions_scaled.append(y_test_predictions_batch.cpu().numpy())
-            y_test_targets_scaled.append(y_test_targets_batch.numpy())
-
-
-    # Transform the collection of np.arrays to a single array for error calculation
-    y_test_predictions_scaled = np.concatenate(y_test_predictions_scaled, axis=0)
-    y_test_targets_scaled = np.concatenate(y_test_targets_scaled, axis=0)
+    y_targets = []
+    y_predictions = []
 
     # Select the right scaler for the OT signal
     scaler_OT = scalers_dict["OT"]
 
-    # Convert predictions back to source scale
-    y_test_predictions = scaler_OT.inverse_transform(y_test_predictions_scaled)
-    y_test_targets = scaler_OT.inverse_transform(y_test_targets_scaled)
+    with torch.no_grad():
+        # no gradient calculation required
+
+        for x_batch, y_targets_batch_scaled in test_batches:
+
+            x_batch = x_batch.to(device)       
+
+            # Make the prediction
+            y_predictions_batch_scaled = model(x_batch)      # shape = [batch_size, forecast_length]
+
+            # Flatten to 1 dimension for inverse scaling, inverse_transform() needs input of [timesteps, n_features=1] because it was fitted on 1 feature only
+            # Reshape [batch_size, forecast_length] --> [batch_size x forecast_length, 1]
+            # Convert tensors to np.ndarrays for analysis, must be done on cpu so .cpu() on the predictions before .numpy(). 
+            # Targets are on cpu already, never sent to device
+            y_predictions_batch_scaled.cpu().numpy().reshape(-1,1)
+            y_targets_batch_scaled.numpy().reshape(-1,1)
+
+            # Rescale
+            y_predictions_batch = scaler_OT.inverse_transform(y_predictions_batch_scaled)
+            y_targets_batch = scaler_OT.inverse_transform(y_targets_batch_scaled)
+
+            # Reshape back from flattened [batch_size x forecast_length, 1] --> [batch_size, forecast_length]
+            forecast_length = y_predictions_batch.shape[1]
+            y_predictions_batch.reshape(-1, forecast_length)
+            y_targets_batch.reshape(-1, forecast_length)
+
+            # Collect all y_prediction and y_target batches simultaneously (also works whenthe batches are shuffled)
+            # List shape: [batch_qty], batches sit side by side with samples stacked within
+            y_predictions.append(y_predictions_batch)
+            y_targets.append(y_targets_batch)
+
+
+    # Transform the list of np.arrays to a single array for error calculation   shape: [batch_size x batch_qty = sample_qty, forecast_horizon]
+    # All samples of all batches are stacked on top of each other (axis = 0 --> stacking in first dim of each batch = sample index)
+    y_predictions = np.concatenate(y_predictions, axis=0)
+    y_targets     = np.concatenate(y_targets, axis=0)
+
 
     ### Calculating metrics
-    test_mse = mean_squared_error(y_test_targets, y_test_predictions)
-    test_mae = mean_absolute_error(y_test_targets, y_test_predictions)
+    test_mse = mean_squared_error(y_targets, y_predictions)
+    test_mae = mean_absolute_error(y_targets, y_predictions)
 
     print(f"\nTest MSE: {test_mse:.8f}")
     print(f"Test MAE: {test_mae:.8f}")
 
-    return y_test_predictions, y_test_targets, test_mse, test_mae
+
+
+    return y_predictions, y_targets, test_mse, test_mae, y_predictions_batch_scaled, y_targets_batch_scaled     # remove last two after test
 
 
 
@@ -77,7 +92,7 @@ def prediction_plot(
 
     # Unpack time series to plot
     _, _, _, _, training_split, validation_split, test_split = prepared_data 
-    y_test_predictions, y_test_targets, _, _                 = test_results
+    y_test_predictions, y_test_targets, _, _, _, _           = test_results     # remove last two after test
 
     # Create time axis, use the input and prediction window as bounds
     time = np.arange(-context_length, forecast_length, 1)
@@ -88,7 +103,7 @@ def prediction_plot(
     # Plot inputs
     plt.plot(
         time[:context_length],
-        validation_split[-context:]["OT"],
+        validation_split[-context_length:]["OT"],
         linewidth=2,
         label="x_inputs",
         color="navy",

@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+from copy import deepcopy
 
 
 
@@ -18,8 +19,7 @@ def data_prep(
         vali_length_months: int, 
         test_length_months: int, 
         context_length: int,
-        scaler: object
-        
+        scaler: object        
         ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, dict, pd.DataFrame, pd.DataFrame, pd.DataFrame]:
 
     '''
@@ -80,16 +80,19 @@ def data_prep(
 
     for column in training_set.columns:
 
-        # Define and fit the scaler on the training set of each signal only
-        scaler.fit(training_set[[column]])
+        # New scaler object per column
+        col_scaler = deepcopy(scaler)  
+
+        # Fit the scaler on the training set of each signal only
+        col_scaler.fit(training_set[[column]])
 
         # Save this column's scaler for later inverse transformation of predictions
-        scalers_dict[column] = scaler
+        scalers_dict[column] = col_scaler
 
         # Transform the training, validation, and test sets of each signal using the fitted scaler. All set have the same index and columns as the original data frames.
-        training_set_scaled[column] = scaler.transform(training_set[[column]])
-        validation_set_scaled[column] = scaler.transform(validation_set[[column]])
-        test_set_scaled[column] = scaler.transform(test_set[[column]])
+        training_set_scaled[column] = col_scaler.transform(training_set[[column]])
+        validation_set_scaled[column] = col_scaler.transform(validation_set[[column]])
+        test_set_scaled[column] = col_scaler.transform(test_set[[column]])
 
 
     return training_set_scaled, validation_set_scaled, test_set_scaled, scalers_dict, training_split, validation_split, test_split

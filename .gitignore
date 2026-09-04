@@ -9,3 +9,10 @@ _literature
 # IPython
 profile_default/
 ipython_config.py
+
+# Virtual environments
+.venv
+
+#Metadata for installed projects
+*.egg-info/
+__pycache__
