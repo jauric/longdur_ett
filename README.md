@@ -1,7 +1,7 @@
 # ***longdur_ett*** | Long-Duration Time Series Forecasting on the ETT Dataset
 - (c) Johannes Aurich, August 2026 
 - GitHub: https://github.com/jauric
-- This project is licensed under the MIT License. See `LICENSE.md` for details.
+- This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
 ## Overview
 
