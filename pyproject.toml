@@ -3,9 +3,9 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "longdur_etth1"
+name = "longdur_ett"
 version = "1.0.0"
-description = "Long-Duration Forecasting of ETTh1"
+description = "Long-Duration Time Series Forecasting on the ETT Dataset"
 readme = "README.md"
 requires-python = ">=3.13.11"
 dependencies = [
