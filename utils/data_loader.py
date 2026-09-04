@@ -106,8 +106,8 @@ def create_batches(
 
     print("x_inputs batch shape:", x_inputs_batch.shape)
     print("y_targets batch shape:", y_targets_batch.shape)
-    print("Number of batches:", len(training_batches))
-
+    print("Number of training batches:", len(training_batches))
+    print("Number of test batches:", len(test_batches))
 
     return training_batches, validation_batches, test_batches
     # each batch = x_inputs, y_targets, with 
