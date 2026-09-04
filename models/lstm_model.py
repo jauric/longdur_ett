@@ -3,12 +3,13 @@ from torch import nn
 
 class LSTM_ForecastModel(nn.Module):
 
-    def __init__(self, num_input_features: int, lstm_width: int, lstm_depth: int, forecast_length: int):
+    def __init__(self, num_input_features: int, lstm_width: int, lstm_depth: int, forecast_length: int, dropout: float):
 
         self.num_input_features = num_input_features   # multivariate input sequence: channel_number = features processed per timestep
         self.lstm_width         = lstm_width           # neurons per layer
         self.lstm_depth         = lstm_depth           # number of layers
         self.forecast_length    = forecast_length      # [hours] -- can be tuned as hyperparameter
+        self.dropout            = dropout              # 0.2 would mean roughly (20)% of the relevant activations are dropped during each training pass. can help avoid overfitting with large datasets
 
         super().__init__()      # initializing the nn.Module parent class also
 
@@ -18,8 +19,8 @@ class LSTM_ForecastModel(nn.Module):
             input_size   = self.num_input_features,
             hidden_size  = self.lstm_width,
             num_layers   = self.lstm_depth,
-            batch_first  = True,                         # batch size = first entry in the DataLoader outputs, typically True
-            # dropout     = dropout       # 0.2 would mean roughly (20)% of the relevant activations are dropped during each training pass. can help avoid overfitting with large datasets
+            batch_first  = True,             # batch size = first entry in the DataLoader outputs, typically True
+            dropout      = dropout           
         )
 
         # Linear output layer for direct one-shot multi-timestep forecasting
